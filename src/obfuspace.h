@@ -1,11 +1,11 @@
 #ifndef __OBFUSPACE_H__
 #define __OBFUSPACE_H__
 
-char whitespace[] = {32, 9, 10, 13};
+char WHITESPACE_CHARS[] = {' ', '\t', '\n', '\r'};
 
 // Crumb being 2 bits
 #define WHITESPACE_TO_CRUMB(c) (((c) & 3) + (((c) & 4) >> 1))
-#define CRUMB_TO_WHITESPACE(n) (whitespace[n])
+#define CRUMB_TO_WHITESPACE(n) (WHITESPACE_CHARS[n])
 #define GET_CRUMB(c, n) (((c) >> ((3 - (n)) * 2)) & 3)
 #define SET_CRUMB(c, n) (((c) & 3) << ((3 - (n)) * 2))
 
@@ -31,7 +31,18 @@ char whitespace[] = {32, 9, 10, 13};
     SET_BYTE(CRUMB_TO_WHITESPACE(GET_CRUMB(b, 3)), 3) \
 )
 
-//#define SANITY_MASK_8(c) (!(32 | 10 | 9 | 13))
+#define IS_WHITESPACE_8(c) ( \
+    ((c) == WHITESPACE_CHARS[0]) | \
+    ((c) == WHITESPACE_CHARS[1]) | \
+    ((c) == WHITESPACE_CHARS[2]) | \
+    ((c) == WHITESPACE_CHARS[3]) \
+)
 
+#define IS_WHITESPACE_32(i) ( \
+    IS_WHITESPACE_8(((i) >> 24) & 0xFF) & \
+    IS_WHITESPACE_8(((i) >> 16) & 0xFF) & \
+    IS_WHITESPACE_8(((i) >> 8) & 0xFF) & \
+    IS_WHITESPACE_8((i) & 0xFF) \
+)
 
 #endif // __OBFUSPACE_H__

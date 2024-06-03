@@ -70,6 +70,29 @@ void test_byte_to_whitespace() {
     printf("test_byte_to_whitespace passed\n");
 }
 
+void test_is_whitespace_8() {
+    assert(IS_WHITESPACE_8(' ') == 1);
+    assert(IS_WHITESPACE_8('\t') == 1);
+    assert(IS_WHITESPACE_8('\n') == 1);
+    assert(IS_WHITESPACE_8('\r') == 1);
+    assert(IS_WHITESPACE_8('a') == 0);
+    assert(IS_WHITESPACE_8('0') == 0);
+    assert(IS_WHITESPACE_8('\0') == 0);
+    printf("test_is_whitespace_8 passed\n");
+}
+
+void test_is_whitespace_32() {
+    assert(IS_WHITESPACE_32(0x20202020) == 1); // "    "
+    assert(IS_WHITESPACE_32(0x09090909) == 1); // "\t\t\t\t"
+    assert(IS_WHITESPACE_32(0x0A0A0A0A) == 1); // "\n\n\n\n"
+    assert(IS_WHITESPACE_32(0x0D0D0D0D) == 1); // "\r\r\r\r"
+    assert(IS_WHITESPACE_32(0x2020200A) == 1); // "   \n"
+    assert(IS_WHITESPACE_32(0x20206120) == 0); // "  a "
+    assert(IS_WHITESPACE_32(0x00000000) == 0); // "\0\0\0\0"
+    printf("test_is_whitespace_32 passed\n");
+}
+
+
 int main() {
     test_whitespace_to_crumb();
     test_crumb_to_whitespace();
@@ -79,6 +102,8 @@ int main() {
     test_set_byte();
     test_whitespace_to_byte();
     test_byte_to_whitespace();
+    test_is_whitespace_8();
+    test_is_whitespace_32();
 
     return 0;
 }

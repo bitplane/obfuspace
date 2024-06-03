@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-LDFLAGS = -lcheck
+LDFLAGS =
 
 SRC_DIR = src
 TEST_DIR = tests
