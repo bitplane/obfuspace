@@ -8,39 +8,35 @@ BUILD_DIR = build
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
-TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(TEST_FILES))
 
-EXECUTABLE = $(BUILD_DIR)/obufspace
+# Create a list of executables based on the test files
 TEST_EXECUTABLES = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%, $(TEST_FILES))
 
 all: $(EXECUTABLE) $(TEST_EXECUTABLES)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+# Rule for creating executables from source files
+$(BUILD_DIR)/%: $(SRC_DIR)/%.c
 	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.c
+# Rule for creating test executables
+$(BUILD_DIR)/%: $(TEST_DIR)/%.c
 	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I $(SRC_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I $(SRC_DIR) $< -o $@
 
-$(EXECUTABLE): $(OBJ_FILES)
-	$(CC) $(CFLAGS) $^ -o $@
-
-$(TEST_EXECUTABLES): $(TEST_OBJ_FILES)
-	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
-
+# Run all tests
 test: $(TEST_EXECUTABLES)
 	@for test in $(TEST_EXECUTABLES); do \
 		./$$test; \
 	done
 
+# List all test executables
 list-tests: $(TEST_EXECUTABLES)
 	@for test in $(TEST_EXECUTABLES); do \
 		echo ./$$test; \
 	done
 
-
+# Clean build directory
 clean:
 	rm -rf $(BUILD_DIR)
 
