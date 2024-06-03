@@ -1,26 +1,30 @@
 #include <stdio.h>
-#include <time.h>
 #include <stdint.h>
+#include <time.h>
 #include <string.h>
 #include "../src/obfuspace.h"
 
 void test_encode_speed() {
     char *test_input = "Let's go for 100 chars of text that we want to encode. Some more text. And a bit longer. There, 100";
     int loops = 10000000;
+    int32_t result; // Declare result variable
 
     for (int i = 0; i < loops; ++i) {
         char *pos = test_input;
         while (*pos != 0) {
-            BYTE_TO_WHITESPACE(*pos);
+            result = BYTE_TO_WHITESPACE(*pos);  // Use the result
             pos++;
         }
     }
+
+    // Use result in some way to avoid the compiler optimizing it out
+    printf("Last encode result: %d\n", result);
 }
 
 void test_decode_speed() {
     char *test_input = "Let's go for 100 chars of text that we want to encode. Some more text. And a bit longer. There, 100";
     int32_t encoded_buffer[1024];
-    uint8_t decoded_buffer[1024];
+    uint8_t decoded_buffer[1024]; // Use this variable in the loop
     size_t len = strlen(test_input);
 
     // Manually encode the input string
@@ -29,12 +33,18 @@ void test_decode_speed() {
     }
 
     int loops = 10000000;
+    uint8_t result; // Declare result variable
 
     for (int i = 0; i < loops; ++i) {
         for (size_t j = 0; j < len; ++j) {
-            WHITESPACE_TO_BYTE(encoded_buffer[j]);
+            result = WHITESPACE_TO_BYTE(encoded_buffer[j]);  // Use the result
+            decoded_buffer[j] = result; // Store in the decoded buffer to use it
         }
     }
+
+    // Use result and decoded_buffer in some way to avoid the compiler optimizing them out
+    printf("Last decode result: %d\n", result);
+    printf("First decoded character: %c\n", decoded_buffer[0]);
 }
 
 int main() {
