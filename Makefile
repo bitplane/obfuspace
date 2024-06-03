@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -O2 -march=native -flto -funroll-loops -fomit-frame-pointer
-LDFLAGS = -flto
+LDFLAGS = 
 
 SRC_DIR = src
 TEST_DIR = tests
