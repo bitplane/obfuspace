@@ -5,14 +5,14 @@
 
 #define BUFFER_SIZE 10240
 
-inline size_t encode_bytes(const uint8_t *input, int32_t *output, size_t size) {
+size_t encode_bytes(const uint8_t *input, int32_t *output, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         output[i] = BYTE_TO_WHITESPACE(input[i]);
     }
     return size;
 }
 
-inline size_t decode_bytes(const int32_t *input, uint8_t *output, size_t size) {
+size_t decode_bytes(const int32_t *input, uint8_t *output, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         output[i] = WHITESPACE_TO_BYTE(input[i]);
     }
